@@ -1,0 +1,52 @@
+CREATE DATABASE siswaRPL;
+
+USE siswaRPL;
+
+CREATE TABLE jurusan (
+    id_jurusan INT AUTO_INCREMENT PRIMARY KEY,
+    nama_jurusan VARCHAR(100) NOT NULL
+);
+
+INSERT INTO jurusan (nama_jurusan) VALUES
+('Rekayasa Perangkat Lunak'),
+('Teknik Komputer dan Jaringan'),
+('Multimedia');
+
+CREATE TABLE guru (
+    id_guru INT AUTO_INCREMENT PRIMARY KEY,
+    nama_guru VARCHAR(100) NOT NULL,
+    nip VARCHAR(20) UNIQUE,
+    mata_pelajaran VARCHAR(100)
+);
+
+INSERT INTO guru (nama_guru, nip, mata_pelajaran) VALUES
+('Suangli', '1980123456', 'Basis Data'),
+('Radiffa Gunawan', '1980456789', 'Pemrograman Web');
+
+CREATE TABLE siswa (
+    id_siswa INT AUTO_INCREMENT PRIMARY KEY,
+    nama_siswa VARCHAR(100) NOT NULL,
+    nis VARCHAR(20) UNIQUE,
+    alamat TEXT,
+    id_jurusan INT,
+    id_guru INT,
+    FOREIGN KEY (id_jurusan) REFERENCES jurusan(id_jurusan),
+    FOREIGN KEY (id_guru) REFERENCES guru(id_guru)
+);
+
+
+INSERT INTO siswa (nama_siswa, nis, alamat, id_jurusan, id_guru) VALUES
+('Saskia Alexandra', '2023001', 'Medan', 1, 1),
+('Alexander', '2023002', 'Medan', 1, 1),
+('Cintami', '2023003', 'Medan', 2, 2);
+
+SELECT s.id_siswa, s.nama_siswa, s.nis, j.nama_jurusan, g.nama_guru AS wali_kelas
+FROM siswa s
+JOIN jurusan j ON s.id_jurusan = j.id_jurusan
+JOIN guru g ON s.id_guru = g.id_guru;
+
+| id\_siswa | nama\_siswa  | nis     | nama\_jurusan                | wali\_kelas  |
+| --------- | ------------ | ------- | ---------------------------- | ------------ |
+| 1         | Saskia       | 2023001 | Rekayasa Perangkat Lunak     | Suangli |
+| 2         | Alexander    | 2023002 | Rekayasa Perangkat Lunak     | Suangli|
+| 3         | Cintami      | 2023003 | Teknik Komputer dan Jaringan | Radiffa Gunawan|
